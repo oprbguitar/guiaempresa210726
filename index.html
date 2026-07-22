@@ -2,475 +2,112 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0b0b0d">
   <meta name="description" content="Nexo Industrial Perú: normativa, herramientas y análisis para tomar decisiones.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <title>Nexo Industrial Perú</title>
   <style>
-    :root {
-      --bg: #f3eee7;
-      --surface: #fffdf9;
-      --ink: #101114;
-      --muted: #676a72;
-      --line: rgba(17,18,20,.1);
-      --header: #09090b;
-      --panel: #121316;
-      --panel-2: #1d1f23;
-      --orange: #ff5a00;
-      --orange-2: #ff7a1a;
-      --pink: #d81963;
-      --shadow: 0 24px 60px rgba(16, 17, 20, .12);
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    :root{
+      --bg:#f4efe8;--surface:#fffdfa;--ink:#111216;--muted:#686b72;
+      --dark:#0d0e11;--dark2:#17191d;--card:#202226;--orange:#ff5a00;
+      --orange2:#ff7a1a;--pink:#d91d63;--line:rgba(17,18,22,.1);
+      --shadow:0 18px 48px rgba(16,17,20,.12);--r:22px;
+      font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 75% 8%, rgba(255,255,255,.55), transparent 28%),
-        linear-gradient(180deg, #f7f3ee 0%, var(--bg) 100%);
-    }
-    img { max-width: 100%; display: block; }
-    button, a { font: inherit; }
-    a { color: inherit; text-decoration: none; }
-    button { cursor: pointer; }
-    .shell { width: min(1280px, calc(100% - 24px)); margin-inline: auto; }
-    .skip { position: fixed; left: 14px; top: -90px; z-index: 100; background: #fff; color: #000; padding: 12px 14px; border-radius: 12px; }
-    .skip:focus { top: 14px; }
+    *{box-sizing:border-box}html,body{height:100%;margin:0}html{background:var(--bg)}
+    body{overflow:hidden;color:var(--ink);background:radial-gradient(circle at 76% 5%,#fff 0,transparent 29%),linear-gradient(180deg,#f8f5f0,var(--bg));}
+    button,a{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}img{display:block;max-width:100%}
+    .skip{position:fixed;left:12px;top:-70px;z-index:99;background:#fff;padding:10px 12px;border-radius:10px}.skip:focus{top:12px}
+    .app{height:100dvh;min-height:520px;display:grid;grid-template-rows:auto minmax(0,1fr);gap:10px;padding:10px}
+    .topbar{height:64px;max-width:1420px;width:100%;margin:auto;border-radius:20px;background:rgba(9,9,11,.97);color:#fff;display:grid;grid-template-columns:auto 1fr auto;align-items:center;padding:0 18px;box-shadow:0 14px 36px rgba(0,0,0,.2);z-index:20}
+    .brand{display:flex;align-items:center;gap:10px;min-width:0}.brand svg{width:28px;height:28px;flex:0 0 28px}.brand span{font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .nav{display:flex;justify-content:center;gap:clamp(18px,2.7vw,36px)}.nav a{position:relative;padding:22px 0;color:#c9c9cc;font-size:.9rem}.nav a:hover,.nav a.active{color:#fff}.nav a.active:after{content:"";position:absolute;left:0;right:0;bottom:12px;height:3px;background:var(--orange);border-radius:9px}
+    .head-actions{display:flex;align-items:center;gap:6px}.avatar,.menu{width:38px;height:38px;border:0;border-radius:50%;display:grid;place-items:center;color:#fff}.avatar{background:linear-gradient(135deg,#761f00,var(--orange));font-weight:800}.menu{display:none;background:transparent;font-size:1.1rem}.menu:hover{background:rgba(255,255,255,.08)}
+    .mobile-nav{display:none;position:fixed;top:82px;left:12px;right:12px;z-index:40;border-radius:18px;background:#111215;color:#fff;padding:10px;box-shadow:0 18px 45px rgba(0,0,0,.35)}.mobile-nav.open{display:grid}.mobile-nav a{padding:11px;border-radius:10px}.mobile-nav a:hover{background:rgba(255,255,255,.06)}
 
-    .topbar-wrap { position: sticky; top: 10px; z-index: 30; padding-top: 10px; }
-    .topbar {
-      min-height: 70px;
-      border-radius: 22px;
-      background: rgba(9, 9, 11, .96);
-      color: #fff;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 12px;
-      padding: 0 18px;
-      box-shadow: 0 16px 42px rgba(0,0,0,.22);
-      backdrop-filter: blur(14px);
-    }
-    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
-    .brand span { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .logo { width: 24px; height: 24px; flex: 0 0 24px; }
-    .nav { display: none; justify-content: center; gap: clamp(18px, 3vw, 34px); }
-    .nav a { position: relative; padding: 24px 0; color: rgba(255,255,255,.78); font-size: .95rem; }
-    .nav a.active, .nav a:hover { color: #fff; }
-    .nav a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: 14px; height: 3px; border-radius: 999px; background: var(--orange); }
-    .actions { display: flex; align-items: center; gap: 4px; }
-    .round {
-      width: 38px; height: 38px; border-radius: 50%; border: 0;
-      display: grid; place-items: center; color: #fff; background: transparent;
-    }
-    .round:hover, .round:focus-visible { background: rgba(255,255,255,.08); outline: none; }
-    .avatar { background: linear-gradient(135deg, #6f1b00, var(--orange)); font-weight: 700; }
-    .menu-btn { font-size: 1.1rem; }
-    .mobile-nav {
-      display: none; margin-top: 10px; border-radius: 20px; background: #111215; color: #fff;
-      padding: 12px; box-shadow: var(--shadow);
-    }
-    .mobile-nav.open { display: grid; }
-    .mobile-nav a { padding: 12px 10px; border-radius: 12px; color: rgba(255,255,255,.82); }
-    .mobile-nav a:hover, .mobile-nav a.active { background: rgba(255,255,255,.06); color: #fff; }
+    main{max-width:1420px;width:100%;margin:auto;min-height:0;display:grid;grid-template-rows:29% 40% 31%;gap:10px}
+    .hero{min-height:0;display:grid;grid-template-columns:.9fr 1.1fr;align-items:center;gap:20px;padding:8px 24px 0}
+    .eyebrow{margin:0 0 6px;color:#b96f47;text-transform:uppercase;letter-spacing:.14em;font-size:.69rem;font-weight:750}.hero h1{margin:0;font-size:clamp(2.8rem,5.8vw,6rem);line-height:.88;letter-spacing:-.068em}.lead{margin:12px 0 0;color:var(--muted);font-size:clamp(.9rem,1.4vw,1.18rem);max-width:520px}.cta{margin-top:16px;min-height:44px;padding:0 18px;border:0;border-radius:13px;background:linear-gradient(135deg,var(--orange2),var(--orange));color:#fff;font-weight:750;box-shadow:0 12px 24px rgba(255,90,0,.22)}
+    .hero-visual{position:relative;min-height:0;height:100%;display:grid;place-items:center}.blob{position:absolute;inset:4% 2% 2%;background:linear-gradient(135deg,rgba(255,255,255,.76),rgba(233,224,215,.78));border-radius:47% 53% 46% 54%/48% 42% 58% 52%}.hero-image{position:relative;z-index:1;width:min(100%,650px);max-height:100%;object-fit:contain;filter:drop-shadow(0 16px 20px rgba(20,20,22,.13))}
 
-    .hero { display: grid; grid-template-columns: 1.05fr .95fr; gap: 36px; align-items: center; padding: 54px 0 30px; }
-    .eyebrow { margin: 0 0 12px; font-size: .76rem; letter-spacing: .16em; color: #c98357; text-transform: uppercase; font-weight: 700; }
-    h1 { margin: 0; font-size: clamp(3rem, 8vw, 6.2rem); line-height: .92; letter-spacing: -.07em; }
-    .lead { max-width: 520px; margin: 18px 0 0; color: var(--muted); font-size: clamp(1rem, 1.6vw, 1.35rem); line-height: 1.55; }
-    .cta {
-      margin-top: 28px; border: 0; min-height: 56px; padding: 0 24px; border-radius: 16px;
-      color: #fff; font-weight: 700; background: linear-gradient(135deg, var(--orange-2), var(--orange));
-      box-shadow: 0 14px 30px rgba(255,90,0,.22);
-    }
-    .cta:hover { transform: translateY(-1px); }
-    .hero-visual { position: relative; min-height: 300px; display: flex; align-items: center; justify-content: center; }
-    .hero-blob {
-      position: absolute; inset: 4% 2% 4%; border-radius: 45% 55% 52% 48% / 44% 44% 56% 56%;
-      background: linear-gradient(180deg, rgba(255,255,255,.46), rgba(235,227,218,.78));
-    }
-    .hero-image {
-      position: relative; z-index: 1; width: min(100%, 700px); height: auto; object-fit: contain;
-      filter: drop-shadow(0 22px 28px rgba(18,20,22,.14));
-    }
+    .roadmap{min-height:0;border-radius:28px;background:linear-gradient(150deg,#141519,#0f1013 82%);color:#fff;padding:20px 24px 18px;box-shadow:var(--shadow);display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:12px}
+    .road-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.road-head p{margin:0 0 2px;color:#9da0a7;text-transform:uppercase;letter-spacing:.13em;font-size:.66rem}.road-head h2{margin:0;font-size:clamp(1.65rem,3vw,2.55rem);letter-spacing:-.045em}.badge{background:var(--orange);padding:8px 13px;border-radius:999px;font-size:.74rem;font-weight:800;white-space:nowrap}
+    .phase-area{position:relative;min-height:0;display:grid;align-items:center}.rail{position:absolute;left:7%;right:7%;top:18px;height:3px;background:#565960;border-radius:999px}.rail span{display:block;height:100%;width:40%;background:var(--orange);border-radius:999px;transition:.2s}
+    .phases{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;width:min(100%,1160px);margin:auto;padding-top:18px}
+    .phase{position:relative;min-width:0;min-height:106px;border:1px solid rgba(255,255,255,.09);border-radius:18px;background:linear-gradient(180deg,#24262a,#1d1f23);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px 8px 10px;text-align:center;transition:.18s}.phase:hover,.phase:focus-visible{outline:none;border-color:rgba(255,90,0,.7);transform:translateY(-2px)}.phase.active{border-color:var(--orange);background:linear-gradient(180deg,#3b261d,#251a17);box-shadow:inset 0 0 0 1px rgba(255,90,0,.18)}
+    .node{position:absolute;top:-16px;width:16px;height:16px;border-radius:50%;background:#26282d;border:3px solid #7b7f87}.phase.done .node,.phase.active .node{background:var(--orange);border-color:#fff1e9;box-shadow:0 0 0 4px rgba(255,90,0,.19)}
+    .phase-icon{width:44px;height:44px;border-radius:15px;background:#303238;display:grid;place-items:center;color:#fff}.phase.active .phase-icon{background:rgba(255,90,0,.14)}.phase strong{font-size:clamp(.72rem,1.05vw,.9rem);line-height:1.15}
+    .phase-copy{min-height:46px;border-radius:14px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 14px;color:#e7e7e8;font-size:.91rem;text-align:center}.spark{color:var(--orange)}
 
-    .section { padding: 18px 0 0; }
-    .panel {
-      background: linear-gradient(155deg, #141519, #101114 75%); color: #fff;
-      border-radius: 28px; box-shadow: var(--shadow); padding: 32px 28px 28px;
-    }
-    .kicker { margin: 0 0 4px; color: rgba(255,255,255,.58); text-transform: uppercase; letter-spacing: .12em; font-size: .72rem; }
-    .panel h2, .section-title { margin: 0; font-size: clamp(2rem, 4vw, 2.8rem); letter-spacing: -.04em; }
-    .panel-top { display: flex; align-items: start; justify-content: space-between; gap: 18px; }
-    .badge { background: var(--orange); color: #fff; padding: 9px 14px; border-radius: 999px; font-size: .78rem; font-weight: 700; white-space: nowrap; }
-    .steps-wrap { position: relative; margin-top: 28px; padding-top: 28px; overflow-x: auto; }
-    .rail { position: absolute; top: 20px; left: 64px; width: 820px; height: 3px; background: rgba(255,255,255,.18); border-radius: 999px; }
-    .rail > span { display: block; width: 300px; height: 100%; background: var(--orange); border-radius: 999px; transition: width .25s ease; }
-    .steps { display: grid; grid-template-columns: repeat(6, 160px); gap: 14px; position: relative; padding-bottom: 6px; }
-    .step {
-      position: relative; min-height: 138px; border: 1px solid rgba(255,255,255,.08); border-radius: 20px;
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
-      padding: 24px 10px 18px; text-align: center; cursor: pointer;
-    }
-    .step:hover, .step:focus-visible { border-color: rgba(255,90,0,.65); transform: translateY(-2px); outline: none; }
-    .step.active { border-color: rgba(255,90,0,.8); background: linear-gradient(180deg, rgba(255,90,0,.14), rgba(255,90,0,.08)); box-shadow: inset 0 0 0 1px rgba(255,90,0,.28); }
-    .step.done .node, .step.active .node { background: var(--orange); border-color: #fff3eb; box-shadow: 0 0 0 4px rgba(255,90,0,.2); }
-    .node { position: absolute; top: -16px; width: 16px; height: 16px; border-radius: 50%; background: #2b2d33; border: 3px solid #7a7d84; }
-    .step-icon { width: 52px; height: 52px; border-radius: 18px; display: grid; place-items: center; background: rgba(255,255,255,.06); font-size: 1.3rem; }
-    .step-title { font-size: .95rem; font-weight: 600; }
-    .phase-copy { margin-top: 12px; border-radius: 16px; background: rgba(255,255,255,.05); padding: 16px 18px; color: #e4e4e4; display: flex; align-items: center; gap: 12px; }
-    .spark { color: var(--orange); font-size: 1.15rem; }
+    .bottom{min-height:0;display:grid;grid-template-columns:1.45fr .95fr;gap:10px}.tools,.benefits{min-height:0;border:1px solid var(--line);border-radius:24px;background:rgba(255,253,250,.88);box-shadow:0 10px 28px rgba(16,17,20,.06);padding:14px 16px;display:grid;grid-template-rows:auto minmax(0,1fr);gap:9px}.section-title{display:flex;align-items:end;justify-content:space-between;gap:12px}.section-title p{margin:0;color:#a66745;text-transform:uppercase;letter-spacing:.11em;font-size:.63rem}.section-title h3{margin:1px 0 0;font-size:clamp(1.05rem,2vw,1.55rem);letter-spacing:-.035em}.section-title small{color:var(--muted);font-size:.75rem}
+    .tool-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:stretch;justify-content:center}.tool{min-width:0;border:1px solid var(--line);border-radius:16px;background:#fff;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:9px;padding:10px;text-align:left}.tool:hover,.tool:focus-visible{outline:none;border-color:rgba(255,90,0,.35);box-shadow:0 8px 18px rgba(16,17,20,.07)}.tool-icon{width:38px;height:38px;border-radius:12px;background:#18191d;color:var(--orange);display:grid;place-items:center}.tool[data-key=laboral] .tool-icon{color:var(--pink)}.tool[data-key=datos] .tool-icon{background:linear-gradient(135deg,#191a1d,#55162f);color:#fff}.tool strong{display:block;font-size:.83rem}.tool small{display:block;color:var(--muted);font-size:.67rem;line-height:1.25;margin-top:2px}.chev{color:#8a8d94}
+    .benefit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-items:stretch}.benefit{min-width:0;border:1px solid var(--line);border-radius:15px;background:#fff;display:flex;align-items:center;gap:9px;padding:10px}.benefit .tool-icon{width:36px;height:36px;flex:0 0 36px}.benefit strong{font-size:.8rem}.benefit p{margin:2px 0 0;color:var(--muted);font-size:.66rem;line-height:1.25}
 
-    .cards-section { padding: 54px 0 0; }
-    .cards-head { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: end; margin-bottom: 18px; }
-    .cards-head p { margin: 0; color: var(--muted); }
-    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-    .card {
-      border: 1px solid var(--line); background: var(--surface); border-radius: 22px; padding: 18px;
-      display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; box-shadow: 0 10px 28px rgba(16,17,20,.06);
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
-    .card:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(16,17,20,.1); }
-    .card-icon { width: 62px; height: 62px; border-radius: 18px; background: #15161a; color: var(--orange); display: grid; place-items: center; font-size: 1.4rem; }
-    .card[data-key="laboral"] .card-icon { color: var(--pink); }
-    .card[data-key="datos"] .card-icon { background: linear-gradient(135deg, #191a1d, #56152f); color: #fff; }
-    .card-title { font-weight: 700; font-size: 1.1rem; }
-    .card small { display: block; margin-top: 4px; color: var(--muted); font-size: .95rem; line-height: 1.45; }
-    .arrow { color: #7f838a; font-size: 1.6rem; }
+    dialog{width:min(480px,calc(100% - 24px));border:0;padding:0;background:transparent}dialog::backdrop{background:rgba(0,0,0,.62);backdrop-filter:blur(7px)}.modal{position:relative;background:var(--surface);border-radius:22px;padding:26px;box-shadow:var(--shadow)}.modal h3{margin:0;font-size:1.7rem}.modal p{color:var(--muted);line-height:1.45}.modal li{margin:5px 0}.close{position:absolute;right:10px;top:10px;width:38px;height:38px;border:0;border-radius:50%;font-size:1.35rem}
 
-    .benefits { padding: 56px 0 80px; margin-top: 56px; border-top: 1px solid var(--line); }
-    .benefits-grid {
-      margin-top: 22px; display: grid; grid-template-columns: repeat(3, minmax(0,1fr));
-      border-radius: 24px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 10px 26px rgba(16,17,20,.06);
-    }
-    .benefit { padding: 22px; display: flex; align-items: center; gap: 14px; border-right: 1px solid var(--line); min-height: 112px; }
-    .benefit:last-child { border-right: 0; }
-    .benefit .card-icon { width: 52px; height: 52px; border-radius: 16px; font-size: 1.2rem; }
-    .benefit p { margin: 4px 0 0; color: var(--muted); font-size: .94rem; line-height: 1.45; }
-
-    .footer { padding: 0 0 24px; }
-    .footer-box { background: #09090b; color: #fff; border-radius: 22px; padding: 22px 24px; display: flex; justify-content: space-between; gap: 18px; align-items: start; }
-    .footer p { margin: 6px 0 0; color: rgba(255,255,255,.64); font-size: .88rem; line-height: 1.5; }
-    .footer a { color: #ff965a; }
-
-    dialog { width: min(520px, calc(100% - 28px)); border: 0; padding: 0; background: transparent; }
-    dialog::backdrop { background: rgba(0,0,0,.62); backdrop-filter: blur(8px); }
-    dialog .modal { background: var(--surface); border-radius: 24px; box-shadow: var(--shadow); padding: 30px; position: relative; }
-    dialog h3 { margin: 0 0 8px; font-size: 1.8rem; letter-spacing: -.04em; }
-    dialog p { color: var(--muted); line-height: 1.55; }
-    dialog ul { padding-left: 18px; color: var(--ink); }
-    .close { position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; border-radius: 999px; border: 0; background: #f1ede7; }
-
-    @media (min-width: 980px) {
-      .nav { display: flex; }
-      .menu-btn { display: none; }
-      .topbar { gap: 18px; padding: 0 22px; }
-    }
-    @media (max-width: 979px) {
-      .hero { grid-template-columns: 1fr; padding-top: 34px; }
-      .hero-visual { order: 2; min-height: auto; }
-      .hero-image { width: min(100%, 680px); }
-      .cards-head { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 720px) {
-      .shell { width: min(calc(100% - 20px), 1280px); }
-      .topbar { min-height: 58px; border-radius: 18px; padding: 0 12px; }
-      .brand span { font-size: .95rem; }
-      .round { width: 34px; height: 34px; }
-      .hero { padding-top: 24px; gap: 26px; }
-      .lead { max-width: 360px; }
-      .panel { padding: 26px 16px 18px; border-radius: 24px; }
-      .steps-wrap { margin-inline: -2px; }
-      .cards-section { padding-top: 44px; }
-      .grid { grid-template-columns: 1fr; }
-      .benefits { padding-top: 48px; margin-top: 48px; }
-      .benefits-grid { grid-template-columns: 1fr; }
-      .benefit { border-right: 0; border-bottom: 1px solid var(--line); }
-      .benefit:last-child { border-bottom: 0; }
-      .footer-box { flex-direction: column; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { animation: none !important; transition: none !important; }
-    }
+    @media(max-width:980px){.nav{display:none}.menu{display:grid}.topbar{height:58px}.app{padding:8px;gap:8px}.hero{grid-template-columns:1fr .85fr;padding:4px 14px 0}.roadmap{padding:16px}.phases{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding-top:0}.rail{display:none}.phase{min-height:70px;padding:7px 5px;gap:5px}.node{display:none}.phase-icon{width:34px;height:34px;border-radius:11px}.bottom{grid-template-columns:1fr 1fr}.tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.benefit-grid{grid-template-columns:1fr}.benefit p{display:none}.section-title small{display:none}}
+    @media(max-width:640px){.app{min-height:500px}.topbar{border-radius:17px;padding:0 11px}.brand span{font-size:.9rem;max-width:170px}.hero{grid-template-columns:1.05fr .95fr;gap:8px;padding:0 8px}.eyebrow{font-size:.55rem;margin-bottom:3px}.hero h1{font-size:clamp(2.15rem,12vw,3.2rem)}.lead{font-size:.72rem;line-height:1.35;margin-top:7px}.cta{min-height:36px;margin-top:9px;padding:0 13px;font-size:.74rem}.roadmap{border-radius:22px;padding:13px}.road-head p{display:none}.road-head h2{font-size:1.45rem}.badge{padding:6px 10px;font-size:.62rem}.phase-copy{min-height:34px;font-size:.68rem;padding:7px 9px}.phase strong{font-size:.62rem}.bottom{grid-template-columns:1fr;grid-template-rows:1fr auto;gap:7px}.tools,.benefits{border-radius:19px;padding:9px 10px;gap:6px}.section-title p{display:none}.section-title h3{font-size:.96rem}.tool-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.tool{padding:7px;gap:7px;border-radius:13px}.tool-icon{width:31px;height:31px;border-radius:10px}.tool strong{font-size:.68rem}.tool small{font-size:.56rem}.benefits{grid-template-rows:auto auto}.benefit-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.benefit{padding:6px;justify-content:center}.benefit .tool-icon{width:28px;height:28px;flex-basis:28px;border-radius:9px}.benefit strong{font-size:.62rem}.benefit p{display:none}}
+    @media(max-height:700px){.app{gap:7px;padding:7px}.topbar{height:54px}.hero{padding-top:0}.hero h1{font-size:clamp(2rem,5vw,4.5rem)}.lead{margin-top:7px}.cta{margin-top:8px;min-height:36px}.roadmap{padding-top:12px;padding-bottom:12px;gap:7px}.phase{min-height:64px}.phase-copy{min-height:34px;padding-block:7px}.tools,.benefits{padding-block:8px}}
+    @media(max-height:590px){.eyebrow,.lead{display:none}.hero h1{font-size:clamp(1.85rem,4vw,3.5rem)}.cta{margin-top:7px}.section-title small,.tool small,.benefit p{display:none}.phase-icon{width:30px;height:30px}.phase{min-height:54px}.phase-copy{font-size:.62rem}.tools,.benefits{padding:7px}.bottom{gap:7px}}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
   </style>
 </head>
 <body>
-  <a class="skip" href="#main">Saltar al contenido</a>
-
-  <div class="topbar-wrap shell">
-    <header class="topbar" aria-label="Cabecera principal">
-      <a href="#inicio" class="brand" aria-label="Nexo Industrial Perú">
-        <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
-          <defs>
-            <linearGradient id="g1" x1="0" x2="1">
-              <stop offset="0" stop-color="#ff9f1c"></stop>
-              <stop offset="1" stop-color="#ff4d00"></stop>
-            </linearGradient>
-            <linearGradient id="g2" x1="0" x2="1">
-              <stop offset="0" stop-color="#ff5a00"></stop>
-              <stop offset="1" stop-color="#e91e63"></stop>
-            </linearGradient>
-          </defs>
-          <path d="M7 37V11c0-3 3.4-4.7 5.8-2.8L24 17v20c0 3-3.4 4.7-5.8 2.8L7 31Z" fill="url(#g1)"></path>
-          <path d="M24 17 35.2 8.2C37.6 6.3 41 8 41 11v26c0 3-3.4 4.7-5.8 2.8L24 31Z" fill="url(#g2)"></path>
-        </svg>
-        <span>Nexo Industrial Perú</span>
-      </a>
-
-      <nav class="nav" aria-label="Navegación principal">
-        <a class="active" href="#inicio">Inicio</a>
-        <a href="#ruta">Normativa</a>
-        <a href="#herramientas">Herramientas</a>
-        <a href="#beneficios">Análisis</a>
-        <a href="#herramientas">Recursos</a>
-        <a href="#beneficios">Acerca de</a>
-      </nav>
-
-      <div class="actions">
-        <button class="round" aria-label="Buscar" title="Buscar">⌕</button>
-        <button class="round" aria-label="Notificaciones" title="Notificaciones">◊</button>
-        <button class="round avatar" aria-label="Perfil">NI</button>
-        <button id="menuButton" class="round menu-btn" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menú">☰</button>
-      </div>
-    </header>
-    <nav id="mobileNav" class="mobile-nav" aria-label="Menú móvil">
-      <a class="active" href="#inicio">Inicio</a>
-      <a href="#ruta">Normativa</a>
-      <a href="#herramientas">Herramientas</a>
-      <a href="#beneficios">Análisis</a>
-      <a href="#herramientas">Recursos</a>
-      <a href="#beneficios">Acerca de</a>
-    </nav>
-  </div>
+<a class="skip" href="#main">Saltar al contenido</a>
+<div class="app">
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Nexo Industrial Perú">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="a" x1="0" x2="1"><stop stop-color="#ff9f1c"/><stop offset="1" stop-color="#ff4d00"/></linearGradient><linearGradient id="b" x1="0" x2="1"><stop stop-color="#ff5a00"/><stop offset="1" stop-color="#e91e63"/></linearGradient></defs><path d="M7 37V11c0-3 3.4-4.7 5.8-2.8L24 17v20c0 3-3.4 4.7-5.8 2.8L7 31Z" fill="url(#a)"/><path d="M24 17 35.2 8.2C37.6 6.3 41 8 41 11v26c0 3-3.4 4.7-5.8 2.8L24 31Z" fill="url(#b)"/></svg>
+      <span>Nexo Industrial Perú</span>
+    </a>
+    <nav class="nav" aria-label="Navegación principal"><a class="active" href="#">Inicio</a><a href="#ruta">Ruta</a><a href="#herramientas">Herramientas</a><a href="#beneficios">Beneficios</a></nav>
+    <div class="head-actions"><button class="avatar" aria-label="Perfil">NI</button><button id="menuBtn" class="menu" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menú">☰</button></div>
+  </header>
+  <nav id="mobileNav" class="mobile-nav" aria-label="Menú móvil"><a href="#">Inicio</a><a href="#ruta">Ruta</a><a href="#herramientas">Herramientas</a><a href="#beneficios">Beneficios</a></nav>
 
   <main id="main">
-    <section id="inicio" class="hero shell">
-      <div>
-        <p class="eyebrow">Guía empresarial aplicada</p>
-        <h1>Nexo Industrial<br>Perú</h1>
-        <p class="lead">Normativa, herramientas y análisis para tomar decisiones.</p>
-        <button id="startButton" class="cta">↗ &nbsp; Comenzar</button>
-      </div>
-      <div class="hero-visual" aria-label="Visualización industrial">
-        <div class="hero-blob"></div>
-        <img id="heroImage" class="hero-image" src="" alt="Ilustración industrial con planta, panel de análisis, robot y cinta transportadora">
-      </div>
+    <section class="hero" aria-labelledby="pageTitle">
+      <div><p class="eyebrow">Guía empresarial aplicada</p><h1 id="pageTitle">Nexo Industrial<br>Perú</h1><p class="lead">Normativa, herramientas y análisis para tomar decisiones.</p><button id="startBtn" class="cta">↗ &nbsp; Comenzar</button></div>
+      <div class="hero-visual"><div class="blob"></div><img id="heroImage" class="hero-image" src="" alt="Planta industrial con panel de análisis, robot y cinta transportadora"></div>
     </section>
 
-    <section id="ruta" class="section shell">
-      <div class="panel">
-        <div class="panel-top">
-          <div>
-            <p class="kicker">Ruta guiada</p>
-            <h2>Ruta de trabajo</h2>
-          </div>
-          <span class="badge">Fase actual</span>
-        </div>
-
-        <div class="steps-wrap" aria-label="Ruta de trabajo por fases">
-          <div class="rail"><span id="railFill"></span></div>
-          <div class="steps" id="steps"></div>
-        </div>
-
-        <div class="phase-copy"><span class="spark">✦</span><span id="phaseCopy">Te ayuda a elegir matrices, guías y formatos aplicables al problema.</span></div>
-      </div>
+    <section id="ruta" class="roadmap" aria-labelledby="routeTitle">
+      <div class="road-head"><div><p>Ruta guiada</p><h2 id="routeTitle">Ruta de trabajo</h2></div><span class="badge">Fase actual</span></div>
+      <div class="phase-area"><div class="rail"><span id="railFill"></span></div><div id="phases" class="phases"></div></div>
+      <div class="phase-copy"><span class="spark">✦</span><span id="phaseCopy">Te ayuda a elegir matrices, guías y formatos aplicables al problema.</span></div>
     </section>
 
-    <section id="herramientas" class="cards-section shell">
-      <div class="cards-head">
-        <div>
-          <p class="eyebrow">Explora por necesidad</p>
-          <h2 class="section-title">Herramientas esenciales</h2>
-        </div>
-        <p>Accesos rápidos para ubicar el punto de partida sin saturar la pantalla.</p>
-      </div>
-      <div class="grid" id="cards"></div>
-    </section>
-
-    <section id="beneficios" class="benefits shell">
-      <p class="eyebrow">Valor práctico</p>
-      <h2 class="section-title">¿Para qué sirve?</h2>
-      <div class="benefits-grid" id="benefitsGrid"></div>
+    <section class="bottom" aria-label="Herramientas y beneficios">
+      <div id="herramientas" class="tools"><div class="section-title"><div><p>Explora por necesidad</p><h3>Herramientas esenciales</h3></div><small>Accesos rápidos y centrados.</small></div><div id="toolGrid" class="tool-grid"></div></div>
+      <div id="beneficios" class="benefits"><div class="section-title"><div><p>Valor práctico</p><h3>¿Para qué sirve?</h3></div></div><div id="benefitGrid" class="benefit-grid"></div></div>
     </section>
   </main>
+</div>
 
-  <footer class="footer shell">
-    <div class="footer-box">
-      <div>
-        <strong>Nexo Industrial Perú</strong>
-        <p>Contenido informativo y referencial. Verifique la normativa vigente antes de tomar decisiones.</p>
-      </div>
-      <div>
-        <strong>Powered by <a href="https://www.andesnova.solutions/" target="_blank" rel="noopener noreferrer">AndesNova</a></strong>
-        <p>© <span id="year"></span> Todos los derechos reservados.</p>
-      </div>
-    </div>
-  </footer>
+<dialog id="dialog"><div class="modal"><button id="closeDialog" class="close" aria-label="Cerrar">×</button><h3 id="dialogTitle"></h3><p id="dialogText"></p><ul id="dialogList"></ul><p><strong>Estado:</strong> módulo en preparación.</p></div></dialog>
 
-  <dialog id="cardDialog" aria-labelledby="dialogTitle">
-    <div class="modal">
-      <button class="close" id="closeDialog" aria-label="Cerrar">×</button>
-      <h3 id="dialogTitle"></h3>
-      <p id="dialogDescription"></p>
-      <p><strong>Módulos previstos:</strong></p>
-      <ul id="dialogList"></ul>
-      <p><strong>Estado:</strong> Módulo en preparación.</p>
-    </div>
-  </dialog>
-
-  <script>
-    (async function loadHero(){
-      const parts = ['01','02','03','04','05','06'];
-      try {
-        const data = (await Promise.all(parts.map(n => fetch(`assets/hero-${n}.b64`).then(r => {
-          if (!r.ok) throw new Error(`No se pudo cargar hero-${n}`);
-          return r.text();
-        })))).join('').replace(/\s+/g,'');
-        document.getElementById('heroImage').src = `data:image/webp;base64,${data}`;
-      } catch (error) {
-        console.error(error);
-        document.getElementById('heroImage').alt = 'La imagen industrial no pudo cargarse.';
-      }
-    })();
-  </script>
-
-  <script>
-    const phases = [
-      { title: 'Diagnóstico', icon: '⌕', text: 'Identifica el problema, sus causas, alcance y datos disponibles.' },
-      { title: 'Normativa', icon: '▤', text: 'Relaciona el problema con obligaciones legales, técnicas y sectoriales.' },
-      { title: 'Herramientas', icon: '▣', text: 'Te ayuda a elegir matrices, guías y formatos aplicables al problema.' },
-      { title: 'Análisis', icon: '▥', text: 'Convierte registros y mediciones en indicadores, hallazgos y prioridades.' },
-      { title: 'Implementación', icon: '⚙', text: 'Organiza acciones, responsables, recursos, plazos y evidencias.' },
-      { title: 'Mejora', icon: '↗', text: 'Evalúa los resultados y establece nuevas acciones de mejora continua.' }
-    ];
-
-    const cards = [
-      { key: 'sst', title: 'SST', description: 'IPERC, mapa de riesgos, registros', icon: '◈', items: ['IPERC', 'Mapa de riesgos', 'Registros obligatorios', 'Plan anual de SST'] },
-      { key: 'laboral', title: 'Laboral', description: 'Jornada, SCTR, obligaciones clave', icon: '⚗', items: ['Jornada y horario', 'SCTR', 'Obligaciones laborales', 'Fiscalización básica'] },
-      { key: 'procesos', title: 'Procesos', description: 'Kaizen, 5S, VSM, indicadores', icon: '⌘', items: ['Kaizen', '5S', 'VSM', 'Indicadores operativos'] },
-      { key: 'datos', title: 'Datos', description: 'Dashboards, tablas y reportes', icon: '▥', items: ['Dashboards', 'Tablas comparativas', 'Reportes', 'Lectura de indicadores'] }
-    ];
-
-    const benefits = [
-      { title: 'Aprender', description: 'Comprende conceptos y normativa clave.', icon: '▤', key: 'laboral' },
-      { title: 'Aplicar', description: 'Usa herramientas y formatos prácticos.', icon: '◔', key: 'sst' },
-      { title: 'Resolver', description: 'Toma mejores decisiones con evidencia.', icon: '◉', key: 'datos' }
-    ];
-
-    const stepsEl = document.getElementById('steps');
-    const phaseCopy = document.getElementById('phaseCopy');
-    const railFill = document.getElementById('railFill');
-    const cardsEl = document.getElementById('cards');
-    const benefitsEl = document.getElementById('benefitsGrid');
-    const dialog = document.getElementById('cardDialog');
-    const closeDialog = document.getElementById('closeDialog');
-    const dialogTitle = document.getElementById('dialogTitle');
-    const dialogDescription = document.getElementById('dialogDescription');
-    const dialogList = document.getElementById('dialogList');
-    const menuButton = document.getElementById('menuButton');
-    const mobileNav = document.getElementById('mobileNav');
-    const startButton = document.getElementById('startButton');
-
-    let activePhase = 2;
-
-    function renderPhases() {
-      stepsEl.innerHTML = '';
-      phases.forEach((phase, index) => {
-        const btn = document.createElement('button');
-        btn.className = 'step' + (index < activePhase ? ' done' : '') + (index === activePhase ? ' active' : '');
-        btn.type = 'button';
-        btn.setAttribute('aria-current', index === activePhase ? 'step' : 'false');
-        btn.innerHTML = `<span class="node"></span><span class="step-icon">${phase.icon}</span><span class="step-title">${phase.title}</span>`;
-        btn.addEventListener('click', () => setActivePhase(index));
-        stepsEl.appendChild(btn);
-      });
-      phaseCopy.textContent = phases[activePhase].text;
-      railFill.style.width = `${160 + (activePhase * 154)}px`;
-    }
-
-    function setActivePhase(index) {
-      activePhase = index;
-      renderPhases();
-    }
-
-    function openCard(card) {
-      dialogTitle.textContent = card.title;
-      dialogDescription.textContent = card.description;
-      dialogList.innerHTML = '';
-      card.items.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = item;
-        dialogList.appendChild(li);
-      });
-      dialog.showModal();
-    }
-
-    function renderCards() {
-      cards.forEach(card => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'card';
-        button.dataset.key = card.key;
-        button.innerHTML = `
-          <span class="card-icon">${card.icon}</span>
-          <span>
-            <span class="card-title">${card.title}</span>
-            <small>${card.description}</small>
-          </span>
-          <span class="arrow">›</span>
-        `;
-        button.addEventListener('click', () => openCard(card));
-        cardsEl.appendChild(button);
-      });
-    }
-
-    function renderBenefits() {
-      benefits.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'benefit';
-        const key = item.key || 'sst';
-        card.innerHTML = `
-          <span class="card-icon" style="${key === 'laboral' ? 'color: var(--pink); background:#15161a;' : key === 'datos' ? 'background: linear-gradient(135deg, #191a1d, #56152f); color:#fff;' : 'background:#15161a; color: var(--orange);'}">${item.icon}</span>
-          <span>
-            <strong>${item.title}</strong>
-            <p>${item.description}</p>
-          </span>
-        `;
-        benefitsEl.appendChild(card);
-      });
-    }
-
-    menuButton?.addEventListener('click', () => {
-      const open = mobileNav.classList.toggle('open');
-      menuButton.setAttribute('aria-expanded', String(open));
-    });
-
-    mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      mobileNav.classList.remove('open');
-      menuButton.setAttribute('aria-expanded', 'false');
-    }));
-
-    startButton.addEventListener('click', () => {
-      document.getElementById('ruta').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setTimeout(() => setActivePhase(0), 240);
-    });
-
-    closeDialog.addEventListener('click', () => dialog.close());
-    dialog.addEventListener('click', (event) => {
-      const rect = dialog.querySelector('.modal').getBoundingClientRect();
-      const clickedInDialog = rect.top <= event.clientY && event.clientY <= rect.top + rect.height && rect.left <= event.clientX && event.clientX <= rect.left + rect.width;
-      if (!clickedInDialog) dialog.close();
-    });
-    window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && dialog.open) dialog.close(); });
-
-    document.getElementById('year').textContent = new Date().getFullYear();
-    renderPhases();
-    renderCards();
-    renderBenefits();
-  </script>
+<script>
+(async()=>{const parts=['01','02','03','04','05','06'];try{const data=(await Promise.all(parts.map(n=>fetch(`assets/hero-${n}.b64`).then(r=>{if(!r.ok)throw new Error('asset');return r.text()})))).join('').replace(/\s+/g,'');heroImage.src=`data:image/webp;base64,${data}`}catch(e){heroImage.alt='No se pudo cargar la ilustración industrial'}})();
+const phasesData=[
+['Diagnóstico','⌕','Identifica el problema, sus causas, alcance y datos disponibles.'],
+['Normativa','▤','Relaciona el problema con obligaciones legales, técnicas y sectoriales.'],
+['Herramientas','▣','Te ayuda a elegir matrices, guías y formatos aplicables al problema.'],
+['Análisis','▥','Convierte registros y mediciones en indicadores, hallazgos y prioridades.'],
+['Implementación','⚙','Organiza acciones, responsables, recursos, plazos y evidencias.'],
+['Mejora','↗','Evalúa los resultados y establece nuevas acciones de mejora continua.']];
+const tools=[
+{key:'sst',title:'SST',desc:'IPERC, mapa de riesgos, registros',icon:'◈',items:['IPERC','Mapa de riesgos','Registros obligatorios','Plan anual de SST']},
+{key:'laboral',title:'Laboral',desc:'Jornada, SCTR, obligaciones clave',icon:'♙',items:['Jornada y horario','SCTR','Obligaciones laborales','Fiscalización básica']},
+{key:'procesos',title:'Procesos',desc:'Kaizen, 5S, VSM, indicadores',icon:'⌘',items:['Kaizen','5S','VSM','Indicadores operativos']},
+{key:'datos',title:'Datos',desc:'Dashboards, tablas y reportes',icon:'▥',items:['Dashboards','Tablas comparativas','Reportes','Lectura de indicadores']}];
+const benefits=[['Aprender','▤','Comprende conceptos y normativa clave.'],['Aplicar','◔','Usa herramientas y formatos prácticos.'],['Resolver','◉','Toma mejores decisiones con evidencia.']];
+let active=2;const phases=document.getElementById('phases'),phaseCopy=document.getElementById('phaseCopy'),railFill=document.getElementById('railFill');
+function renderPhases(){phases.innerHTML='';phasesData.forEach((p,i)=>{const b=document.createElement('button');b.className='phase'+(i<active?' done':'')+(i===active?' active':'');b.type='button';b.setAttribute('aria-current',i===active?'step':'false');b.innerHTML=`<span class="node"></span><span class="phase-icon">${p[1]}</span><strong>${p[0]}</strong>`;b.onclick=()=>{active=i;renderPhases()};phases.appendChild(b)});phaseCopy.textContent=phasesData[active][2];railFill.style.width=`${active*20}%`}
+function openTool(t){dialogTitle.textContent=t.title;dialogText.textContent=t.desc;dialogList.innerHTML=t.items.map(x=>`<li>${x}</li>`).join('');dialog.showModal()}
+tools.forEach(t=>{const b=document.createElement('button');b.className='tool';b.dataset.key=t.key;b.type='button';b.innerHTML=`<span class="tool-icon">${t.icon}</span><span><strong>${t.title}</strong><small>${t.desc}</small></span><span class="chev">›</span>`;b.onclick=()=>openTool(t);toolGrid.appendChild(b)});
+benefits.forEach((x,i)=>{const d=document.createElement('div');d.className='benefit';d.innerHTML=`<span class="tool-icon" style="${i===0?'color:var(--pink)':i===2?'background:linear-gradient(135deg,#191a1d,#55162f);color:#fff':''}">${x[1]}</span><span><strong>${x[0]}</strong><p>${x[2]}</p></span>`;benefitGrid.appendChild(d)});
+startBtn.onclick=()=>{active=0;renderPhases();document.querySelector('.roadmap').focus?.()};menuBtn.onclick=()=>{const o=mobileNav.classList.toggle('open');menuBtn.setAttribute('aria-expanded',o)};mobileNav.querySelectorAll('a').forEach(a=>a.onclick=()=>{mobileNav.classList.remove('open');menuBtn.setAttribute('aria-expanded','false')});closeDialog.onclick=()=>dialog.close();dialog.onclick=e=>{if(e.target===dialog)dialog.close()};renderPhases();
+</script>
 </body>
 </html>
